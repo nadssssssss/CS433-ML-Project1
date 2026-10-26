@@ -1,0 +1,9 @@
+__pycache__/
+.pytest_cache/
+.DS_Store
+.venv/
+*.pyc
+x_train.csv
+y_train.csv
+x_test.csv
+sample_submission.csv
