@@ -67,8 +67,14 @@ def replace_special_codes(x_train, x_test):
     return x_train, x_test
 
 
-def preprocess_v2(x_train, x_test, special_codes=False, missing_indicators=False,
-                  one_hot=False, squares=False):
+def preprocess_v2(
+    x_train,
+    x_test,
+    special_codes=False,
+    missing_indicators=False,
+    one_hot=False,
+    squares=False,
+):
     """Basic preprocessing plus optional improvements, switched on by flags.
     With special_codes, missing_indicators and one_hot set (and squares not),
     it gives the same result as preprocessing.preprocess_data."""
@@ -164,12 +170,16 @@ if __name__ == "__main__":
             test_idx = k_indices[k]
             train_idx = np.concatenate([k_indices[j] for j in range(K_FOLD) if j != k])
 
-            x_tr_clean, x_te_clean = preprocess_v2(x_train[train_idx], x_train[test_idx], **options)
+            x_tr_clean, x_te_clean = preprocess_v2(
+                x_train[train_idx], x_train[test_idx], **options
+            )
             tx_tr = np.c_[np.ones(len(x_tr_clean)), x_tr_clean]
             tx_te = np.c_[np.ones(len(x_te_clean)), x_te_clean]
             y_tr, y_te = y[train_idx], y[test_idx]
 
-            w, loss = logistic_regression(y_tr, tx_tr, np.zeros(tx_tr.shape[1]), MAX_ITERS, GAMMA)
+            w, loss = logistic_regression(
+                y_tr, tx_tr, np.zeros(tx_tr.shape[1]), MAX_ITERS, GAMMA
+            )
 
             # Threshold chosen on the training folds, F1 measured on the test fold
             threshold, _ = best_threshold(y_tr, sigmoid(tx_tr @ w))
@@ -177,11 +187,15 @@ if __name__ == "__main__":
 
             f1_scores.append(compute_metrics(y_te, y_pred)["f1"])
             losses.append(loss)
-            print(f"  {name}: fold {k + 1}/{K_FOLD}  F1={f1_scores[-1]:.4f}", flush=True)
+            print(
+                f"  {name}: fold {k + 1}/{K_FOLD}  F1={f1_scores[-1]:.4f}", flush=True
+            )
 
         f1_scores = np.array(f1_scores)
-        line = (f"{name:32s} features={tx_tr.shape[1]:4d}  train loss={np.mean(losses):.4f}  "
-                f"F1={f1_scores.mean():.4f} +- {f1_scores.std():.4f}")
+        line = (
+            f"{name:32s} features={tx_tr.shape[1]:4d}  train loss={np.mean(losses):.4f}  "
+            f"F1={f1_scores.mean():.4f} +- {f1_scores.std():.4f}"
+        )
         if baseline_f1 is None:
             baseline_f1 = f1_scores
         else:

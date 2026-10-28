@@ -61,6 +61,7 @@ def print_metrics(name, y_val, scores):
         f"precision={m['precision']:.4f}  recall={m['recall']:.4f}  accuracy={m['accuracy']:.4f}"
     )
 
+
 def logistic_scores(tx, w):
     """Scores of a logistic model: predicted probabilities."""
 
@@ -119,7 +120,9 @@ def cross_validation(x, y, models, k_fold=5, seed=1):
 
             scores_te = score(tx_te, w)
             metrics = compute_metrics(y_te, predict_labels(scores_te, threshold))
-            metrics["f1_at_05"] = compute_metrics(y_te, predict_labels(scores_te, 0.5))["f1"]
+            metrics["f1_at_05"] = compute_metrics(y_te, predict_labels(scores_te, 0.5))[
+                "f1"
+            ]
             metrics["threshold"] = threshold
             results[name].append(metrics)
 
@@ -149,7 +152,9 @@ if __name__ == "__main__":
             w, loss = logistic_regression(y_tr, tx_tr, initial_w, max_iters, gamma)
             threshold, f1 = validation_f1(w, tx_val, y_val)
             results.append((gamma, max_iters, threshold, f1))
-            print(f"  gamma={gamma}  max_iters={max_iters}  threshold={threshold:.2f}  F1={f1:.4f}")
+            print(
+                f"  gamma={gamma}  max_iters={max_iters}  threshold={threshold:.2f}  F1={f1:.4f}"
+            )
 
     best_gamma, best_iters, _, best_f1 = max(results, key=lambda r: r[3])
     print(f"Best: gamma={best_gamma}  max_iters={best_iters}  F1={best_f1:.4f}")
@@ -159,7 +164,9 @@ if __name__ == "__main__":
     print("Regularized logistic regression")
     reg_results = []
     for lambda_ in [1e-5, 1e-4, 1e-3, 1e-2, 1e-1]:
-        w, loss = reg_logistic_regression(y_tr, tx_tr, lambda_, initial_w, best_iters, best_gamma)
+        w, loss = reg_logistic_regression(
+            y_tr, tx_tr, lambda_, initial_w, best_iters, best_gamma
+        )
         threshold, f1 = validation_f1(w, tx_val, y_val)
         reg_results.append((lambda_, threshold, f1))
         print(f"  lambda={lambda_}  threshold={threshold:.2f}  F1={f1:.4f}")
@@ -191,10 +198,12 @@ if __name__ == "__main__":
     w, _ = logistic_regression(y_tr, tx_tr, initial_w, best_iters, best_gamma)
     print_metrics("Logistic regression", y_val, sigmoid(tx_val @ w))
 
-    w, _ = reg_logistic_regression(y_tr, tx_tr, best_lambda, initial_w, best_iters, best_gamma)
+    w, _ = reg_logistic_regression(
+        y_tr, tx_tr, best_lambda, initial_w, best_iters, best_gamma
+    )
     print_metrics(f"Reg. logistic (lambda={best_lambda})", y_val, sigmoid(tx_val @ w))
 
-        # 10. 5-fold cross-validation of the selected models
+    # 10. 5-fold cross-validation of the selected models
     print("5-fold cross-validation")
     models = {
         "Always predict 0": (
