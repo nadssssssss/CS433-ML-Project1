@@ -15,7 +15,7 @@ NumPy only.
 | Model | Logistic regression trained with gradient descent (γ = 0.5, 1000 iterations, w₀ = 0), labels mapped from {-1, 1} to {0, 1} |
 | Decision threshold | Chosen to maximize F1 on the training set (0.20 instead of 0.5, since only about 9% of the samples are positive) |
 | 5-fold CV F1 | 0.428 ± 0.005 |
-| AIcrowd F1 | <score> (submission ID <id>) |
+| AIcrowd F1 | 0.438, accuracy 0.875 (submission ID 338158) |
 
 ## Setup
 
