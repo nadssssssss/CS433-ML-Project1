@@ -1,6 +1,7 @@
 import os
 
 import numpy as np
+import preprocessing
 
 from evaluation import best_threshold, compute_metrics, predict_labels
 from implementations import (
@@ -132,6 +133,10 @@ def cross_validation(x, y, models, k_fold=5, seed=1):
 
 
 if __name__ == "__main__":
+
+    # The tables of the report were computed before improvement_experiments.py,
+    # with the first version of the preprocessing (more than 80% missing: dropped)
+    preprocessing.MAX_MISSING = 0.80
 
     # 1-5. Load, convert labels, split, preprocess, add the bias column
     x_train, y_train = load_data()

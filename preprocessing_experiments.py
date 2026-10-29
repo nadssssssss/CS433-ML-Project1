@@ -4,7 +4,9 @@ Each variant adds changes to the basic preprocessing (median imputation +
 standardization), then trains logistic regression on the same folds as
 training.py, so the F1 scores can be compared fold by fold with the baseline.
 The best variant ("Codes + one-hot + indicators") is the final preprocessing,
-implemented in preprocessing.preprocess_data.
+implemented in preprocessing.preprocess_data. These experiments drop the
+features with more than 80% missing values; improvement_experiments.py then
+raises this threshold to 99.9% (MAX_MISSING).
 """
 
 import numpy as np
@@ -77,7 +79,8 @@ def preprocess_v2(
 ):
     """Basic preprocessing plus optional improvements, switched on by flags.
     With special_codes, missing_indicators and one_hot set (and squares not),
-    it gives the same result as preprocessing.preprocess_data."""
+    it gives the same result as preprocessing.preprocess_data with
+    MAX_MISSING = 0.80."""
 
     # Remove the Id column
     x_train, x_test = x_train[:, 1:], x_test[:, 1:]

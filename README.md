@@ -11,11 +11,11 @@ NumPy only.
 
 | Step | Choice |
 |---|---|
-| Preprocessing | BRFSS special codes ("don't know" / "refused" → missing, "none" → 0), drop columns with more than 80% missing values, missing-value indicators, one-hot encoding of categorical columns (3 to 10 answers), median imputation, standardization |
+| Preprocessing | BRFSS special codes ("don't know" / "refused" → missing, "none" → 0), drop columns with more than 99.9% missing values, missing-value indicators, one-hot encoding of categorical columns (3 to 10 answers), median imputation, standardization |
 | Model | Logistic regression trained with gradient descent (γ = 0.5, 1000 iterations, w₀ = 0), labels mapped from {-1, 1} to {0, 1} |
 | Decision threshold | Chosen to maximize F1 on the training set (0.20 instead of 0.5, since only about 9% of the samples are positive) |
-| 5-fold CV F1 | 0.428 ± 0.005 |
-| AIcrowd F1 | 0.438, accuracy 0.875 (submission ID 338158) |
+| 5-fold CV F1 | 0.439 ± 0.005 |
+| AIcrowd F1 | 0.453, accuracy 0.880 (submission ID 338182) |
 
 ## Setup
 
@@ -57,10 +57,11 @@ the CSV files.
 ```bash
 python training.py                   # hyperparameter search, model comparison, 5-fold CV
 python preprocessing_experiments.py  # preprocessing ablation with 5-fold CV
+python improvement_experiments.py    # features with many missing values, class weights
 ```
 
-The first run caches the training data as `x_train.npy` and `y_train.npy`
-(ignored by git) so that later runs start faster.
+The first two scripts use the first version of the preprocessing (features
+with more than 80% missing values dropped), as in the tables of the report.
 
 ## Files
 
@@ -71,6 +72,7 @@ The first run caches the training data as `x_train.npy` and `y_train.npy`
 | `evaluation.py` | Accuracy, precision, recall, F1, and the search for the F1-maximizing threshold |
 | `training.py` | Train/validation split, hyperparameter grids, model comparison and 5-fold cross-validation |
 | `preprocessing_experiments.py` | Effect of each preprocessing step, measured with 5-fold cross-validation |
+| `improvement_experiments.py` | Effect of keeping features with many missing values and of class weights, measured with 5-fold cross-validation |
 | `run.py` | Trains the final model and creates `submission.csv` |
 | `helpers.py` | Loading and submission helpers provided by the course |
 | `exploration.py` | First look at the data (shape, missing values) |

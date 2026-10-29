@@ -1,6 +1,6 @@
 import numpy as np
 
-MAX_MISSING = 0.80  # columns with more missing values than this are dropped
+MAX_MISSING = 0.999  # columns with more missing values than this are dropped
 MAX_CATEGORIES = 10  # columns with 3 to 10 distinct answers are one-hot encoded
 
 
